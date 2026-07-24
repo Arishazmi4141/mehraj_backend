@@ -1,0 +1,52 @@
+# ========================
+# Maven / Build
+# ========================
+target/
+*.jar
+*.war
+*.ear
+
+# ========================
+# Logs
+# ========================
+*.log
+
+# ========================
+# IDEs
+# ========================
+# IntelliJ IDEA
+.idea/
+*.iml
+
+# Eclipse / STS
+.project
+.classpath
+.settings/
+
+# VS Code
+.vscode/
+
+# ========================
+# OS files
+# ========================
+.DS_Store
+Thumbs.db
+
+# ========================
+# Spring Boot configs (secrets)
+# ========================
+# Add this to your 
+src/main/resources/application.properties
+application-local.properties
+application-prod.properties
+application-dev.properties
+# Optional: Ignore properties with secrets (see step 3)
+# src/main/resources/application.properties
+# ========================
+# Temp / Cache
+# ========================
+tmp/
+*.swp
+
+.metadata/
+logs/api.log.*
