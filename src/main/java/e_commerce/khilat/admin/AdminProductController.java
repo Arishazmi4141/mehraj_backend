@@ -160,9 +160,16 @@ public class AdminProductController {
 
 
 		
-	    @PostMapping("/addCategory")
-	    public Category addCategory(@RequestBody Category category) {
-	        return categoryService.addCategory(category);
+	    @PostMapping(value = "/addCategory", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	    public ResponseEntity<Category> addCategory(
+	            @RequestPart("category") String categoryJson,
+	            @RequestPart(value = "image", required = false) MultipartFile image) throws Exception {
+
+	        ObjectMapper mapper = new ObjectMapper();
+	        Category category = mapper.readValue(categoryJson, Category.class);
+
+	        Category saved = categoryService.addCategoryWithImage(category, image);
+	        return ResponseEntity.ok(saved);
 	    }
 
 	    @PostMapping("/bulk")
@@ -171,10 +178,27 @@ public class AdminProductController {
 	    }
 	    
 	   
-	    @PutMapping("/updateCategory/{id}")
-	    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category) {
-	        Category updatedCategory = categoryService.updateCategory(id, category);
+	    @PutMapping(value = "/updateCategory/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	    public ResponseEntity<Category> updateCategory(
+	            @PathVariable Long id,
+	            @RequestPart("category") String categoryJson,
+	            @RequestPart(value = "image", required = false) MultipartFile image) throws Exception {
+
+	        ObjectMapper mapper = new ObjectMapper();
+	        Category category = mapper.readValue(categoryJson, Category.class);
+
+	        Category updatedCategory = categoryService.updateCategoryWithImage(id, category, image);
 	        return ResponseEntity.ok(updatedCategory);
+	    }
+
+	    @GetMapping("/getCategory/{id}")
+	    public ResponseEntity<Category> getCategoryById(@PathVariable Long id) {
+	        return ResponseEntity.ok(categoryService.getCategoryById(id));
+	    }
+
+	    @GetMapping("/getAllCategories")
+	    public ResponseEntity<List<Category>> getAllCategories() {
+	        return ResponseEntity.ok(categoryService.getAllCategories());
 	    }
 
 	    
