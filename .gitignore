@@ -36,7 +36,7 @@ Thumbs.db
 # Spring Boot configs (secrets)
 # ========================
 # Add this to your 
-src/main/resources/application.properties
+
 application-local.properties
 application-prod.properties
 application-dev.properties
