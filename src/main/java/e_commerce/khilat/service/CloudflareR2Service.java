@@ -134,4 +134,72 @@ public class CloudflareR2Service {
         }
         return fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
     }
+    
+ // ---- ADD these two methods inside CloudflareR2Service.java ----
+
+    public String uploadImage(MultipartFile file, String folder) throws Exception {
+
+        LOGGER.debug("Uploading image to Cloudflare R2 [{}]: {}", folder, file.getOriginalFilename());
+
+        validateFileSize(file);
+
+        byte[] compressedImage = compressImage(file);
+
+        String extension = getFileExtension(file.getOriginalFilename());
+        if (extension == null) {
+            extension = "jpg";
+        }
+
+        String uniqueKey = folder + "/" + UUID.randomUUID() + "." + extension;
+
+        PutObjectRequest putRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(uniqueKey)
+                .contentType(file.getContentType())
+                .build();
+
+        try {
+            s3Client.putObject(putRequest, RequestBody.fromBytes(compressedImage));
+            LOGGER.debug("Upload SUCCESS to R2: {}", uniqueKey);
+        } catch (Exception e) {
+            LOGGER.error("R2 upload FAILED", e);
+            throw new RuntimeException("R2 upload failed", e);
+        }
+
+        return publicUrl.trim() + "/" + uniqueKey;
+    }
+
+    // For PDFs — no compression, just raw upload
+    public String uploadRawFile(MultipartFile file, String folder) throws Exception {
+
+        LOGGER.debug("Uploading raw file to Cloudflare R2 [{}]: {}", folder, file.getOriginalFilename());
+
+        long fileSize = file.getSize();
+        if (fileSize > 32 * 1024 * 1024) {
+            throw new RuntimeException("File size exceeds 32MB limit");
+        }
+
+        String extension = getFileExtension(file.getOriginalFilename());
+        if (extension == null) {
+            extension = "pdf";
+        }
+
+        String uniqueKey = folder + "/" + UUID.randomUUID() + "." + extension;
+
+        PutObjectRequest putRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(uniqueKey)
+                .contentType(file.getContentType())
+                .build();
+
+        try {
+            s3Client.putObject(putRequest, RequestBody.fromBytes(file.getBytes()));
+            LOGGER.debug("Upload SUCCESS to R2: {}", uniqueKey);
+        } catch (Exception e) {
+            LOGGER.error("R2 upload FAILED", e);
+            throw new RuntimeException("R2 upload failed", e);
+        }
+
+        return publicUrl.trim() + "/" + uniqueKey;
+    }
 }
