@@ -37,6 +37,8 @@ import e_commerce.khilat.entity.User;
 import e_commerce.khilat.service.CategoryService;
 import e_commerce.khilat.service.ProductService;
 import e_commerce.khilat.service.UserService;
+import e_commerce.khilat.entity.SubCategory;
+import e_commerce.khilat.service.SubCategoryService;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -45,6 +47,8 @@ public class AdminProductController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AdminProductController.class);
 	
+	@Autowired
+	private SubCategoryService subCategoryService;
 	
 	 @Autowired
 	 private  CategoryService categoryService;
@@ -160,29 +164,77 @@ public class AdminProductController {
 
 
 		
-	    @PostMapping("/addCategory")
-	    public Category addCategory(@RequestBody Category category) {
-	        return categoryService.addCategory(category);
-	    }
+	@PostMapping(value = "/addCategory", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<Category> addCategory(
+			@RequestPart("category") String categoryJson,
+			@RequestPart(value = "image", required = false) MultipartFile image) throws Exception {
 
-	    @PostMapping("/bulk")
-	    public List<Category> addMultipleCategories(@RequestBody List<Category> categories) {
-	        return categoryService.addMultipleCategories(categories);
-	    }
-	    
-	   
-	    @PutMapping("/updateCategory/{id}")
-	    public ResponseEntity<Category> updateCategory(@PathVariable Long id, @RequestBody Category category) {
-	        Category updatedCategory = categoryService.updateCategory(id, category);
-	        return ResponseEntity.ok(updatedCategory);
-	    }
+		ObjectMapper mapper = new ObjectMapper();
+		Category category = mapper.readValue(categoryJson, Category.class);
 
-	    
-	    @DeleteMapping("/deleteCategory/{id}")
-	    public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
-	        categoryService.deleteCategory(id);
-	        return ResponseEntity.ok("Category deleted successfully with id: " + id);
-	    }
-	
+		Category saved = categoryService.addCategoryWithImage(category, image);
+		return ResponseEntity.ok(saved);
+	}
 
+	@PostMapping("/bulk")
+	public List<Category> addMultipleCategories(@RequestBody List<Category> categories) {
+		return categoryService.addMultipleCategories(categories);
+	}
+
+	@PutMapping(value = "/updateCategory/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<Category> updateCategory(
+			@PathVariable Long id,
+			@RequestPart("category") String categoryJson,
+			@RequestPart(value = "image", required = false) MultipartFile image) throws Exception {
+
+		ObjectMapper mapper = new ObjectMapper();
+		Category category = mapper.readValue(categoryJson, Category.class);
+
+		Category updated = categoryService.updateCategoryWithImage(id, category, image);
+		return ResponseEntity.ok(updated);
+	}
+
+	@DeleteMapping("/deleteCategory/{id}")
+	public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
+		categoryService.deleteCategory(id);
+		return ResponseEntity.ok("Category deleted successfully with id: " + id);
+	}
+		
+
+	@GetMapping("/getSubCategoriesByCategory/{categoryId}")
+	public ResponseEntity<List<SubCategory>> getSubCategoriesByCategory(@PathVariable Long categoryId) {
+	    return ResponseEntity.ok(subCategoryService.getSubCategoriesByCategory(categoryId));
+	}
+
+	@DeleteMapping("/deleteSubCategory/{id}")
+	public ResponseEntity<String> deleteSubCategory(@PathVariable Long id) {
+	    subCategoryService.deleteSubCategory(id);
+	    return ResponseEntity.ok("SubCategory deleted successfully with id: " + id);
+	}
+
+	@PostMapping(value = "/addSubCategory/{categoryId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<SubCategory> addSubCategoryWithImage(
+			@PathVariable Long categoryId,
+			@RequestPart("subCategory") String subCategoryJson,
+			@RequestPart(value = "image", required = false) MultipartFile image) throws Exception {
+
+		ObjectMapper mapper = new ObjectMapper();
+		SubCategory subCategory = mapper.readValue(subCategoryJson, SubCategory.class);
+
+		SubCategory saved = subCategoryService.addSubCategoryWithImage(categoryId, subCategory, image);
+		return ResponseEntity.ok(saved);
+	}
+
+	@PutMapping(value = "/updateSubCategory/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<SubCategory> updateSubCategoryWithImage(
+			@PathVariable Long id,
+			@RequestPart("subCategory") String subCategoryJson,
+			@RequestPart(value = "image", required = false) MultipartFile image) throws Exception {
+
+		ObjectMapper mapper = new ObjectMapper();
+		SubCategory subCategory = mapper.readValue(subCategoryJson, SubCategory.class);
+
+		SubCategory updated = subCategoryService.updateSubCategoryWithImage(id, subCategory, image);
+		return ResponseEntity.ok(updated);
+	}
 }

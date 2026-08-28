@@ -15,6 +15,9 @@ public class Category {
 
     private String description;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
 	public Long getId() {
 		return id;
 	}
@@ -39,12 +42,17 @@ public class Category {
 		this.description = description;
 	}
 
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
 	@Override
 	public String toString() {
-		return "Category [id=" + id + ", name=" + name + ", description=" + description + "]";
+		return "Category [id=" + id + ", name=" + name + ", description=" + description
+				+ ", imageUrl=" + imageUrl + "]";
 	}
-    
-    
-    
-    
 }

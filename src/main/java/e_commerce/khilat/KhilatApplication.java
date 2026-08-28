@@ -12,7 +12,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 public class KhilatApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(KhilatApplication.class, args);
+//		SpringApplication.run(KhilatApplication.class, args);
 	    TimeZone.setDefault(TimeZone.getTimeZone("Asia/Kolkata"));
 
 	    System.out.println("Timezone = " + TimeZone.getDefault().getID());
