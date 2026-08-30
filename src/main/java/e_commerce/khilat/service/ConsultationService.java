@@ -1,9 +1,14 @@
 package e_commerce.khilat.service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.criteria.Predicate;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import e_commerce.khilat.dtomodels.ConsultationRequestDto;
@@ -21,7 +26,6 @@ public class ConsultationService {
 
     public ConsultationRequest submitConsultation(ConsultationRequestDto dto) {
 
-        // Kam se kam ek preferred slot mandatory hai
         if (dto.getPreferredSlot1() == null
                 && dto.getPreferredSlot2() == null
                 && dto.getPreferredSlot3() == null) {
@@ -42,7 +46,24 @@ public class ConsultationService {
     }
 
     public Page<ConsultationRequest> searchConsultations(String name, LocalDateTime fromDate, LocalDateTime toDate, Pageable pageable) {
-        return consultationRepo.searchConsultations(name, fromDate, toDate, pageable);
+
+        Specification<ConsultationRequest> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (name != null && !name.trim().isEmpty()) {
+                predicates.add(cb.like(cb.lower(root.get("name")), "%" + name.trim().toLowerCase() + "%"));
+            }
+            if (fromDate != null) {
+                predicates.add(cb.greaterThanOrEqualTo(root.get("createdAt"), fromDate));
+            }
+            if (toDate != null) {
+                predicates.add(cb.lessThanOrEqualTo(root.get("createdAt"), toDate));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        return consultationRepo.findAll(spec, pageable);
     }
 
     public void deleteConsultation(Long id) {
