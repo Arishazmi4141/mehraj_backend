@@ -8,6 +8,7 @@ import e_commerce.khilat.entity.Category;
 import e_commerce.khilat.entity.ProductImage;
 import e_commerce.khilat.entity.ProductVariant;
 import e_commerce.khilat.entity.ReviewMessage;
+import e_commerce.khilat.entity.SubCategory;
 
 public class ProductRequest {
 
@@ -22,6 +23,11 @@ public class ProductRequest {
 	}
 
 	private Category category;
+
+	private Long subCategoryId;
+
+	private SubCategory subCategory;
+
 	private String name;
 	private String description;
 
@@ -97,6 +103,22 @@ public class ProductRequest {
 
 	public void setCategoryId(Long categoryId) {
 		this.categoryId = categoryId;
+	}
+
+	public Long getSubCategoryId() {
+		return subCategoryId;
+	}
+
+	public void setSubCategoryId(Long subCategoryId) {
+		this.subCategoryId = subCategoryId;
+	}
+
+	public SubCategory getSubCategory() {
+		return subCategory;
+	}
+
+	public void setSubCategory(SubCategory subCategory) {
+		this.subCategory = subCategory;
 	}
 
 }
