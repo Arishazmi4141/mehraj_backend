@@ -146,6 +146,11 @@ public class CheckoutService {
         order.setPhone(request.getPhone());
         order.setTrackingKey(Utility.generateTrackingKey());
         order.setStatus(CommonConstant.CREATED);
+        order.setTotalAmount(totalAmount);
+        order.setCreatedAt(LocalDateTime.now());
+        order.setDtOfOps(Long.valueOf(
+                LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyyMMdd"))
+        ));
         
         Order savedOrder = orderRepo.save(order);
         
