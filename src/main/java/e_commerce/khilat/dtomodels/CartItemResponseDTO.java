@@ -16,6 +16,8 @@ public class CartItemResponseDTO {
     
     private String size;     // From ProductVariant
     
+    private String length;
+    
     private Integer quantity;
     
     private BigDecimal price;        // Current price from ProductVariant
@@ -61,6 +63,12 @@ public class CartItemResponseDTO {
 	}
 	public void setSize(String size) {
 		this.size = size;
+	}
+	public String getLength() {
+		return length;
+	}
+	public void setLength(String length) {
+		this.length = length;
 	}
 	public Integer getQuantity() {
 		return quantity;

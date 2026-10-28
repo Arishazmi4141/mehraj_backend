@@ -26,6 +26,10 @@ public class ProductVariant {
     private Long id;
     
     private String size;
+    
+    @Column(name = "length")
+    private String length;
+    
 //    private String color;
     private BigDecimal price; 
     private Integer stock;
@@ -64,6 +68,14 @@ public class ProductVariant {
 
 	public void setSize(String size) {
 		this.size = size;
+	}
+
+	public String getLength() {
+		return length;
+	}
+
+	public void setLength(String length) {
+		this.length = length;
 	}
 
 //	public String getColor() {

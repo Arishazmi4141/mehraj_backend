@@ -134,6 +134,7 @@ public class CartService {
 			if (variant != null) {
 				dto.setVariantId(variant.getId());
 				dto.setSize(variant.getSize());
+				dto.setLength(variant.getLength()); 
 				dto.setStockAvailable(variant.getStock());
 
 				Product product = variant.getProduct();

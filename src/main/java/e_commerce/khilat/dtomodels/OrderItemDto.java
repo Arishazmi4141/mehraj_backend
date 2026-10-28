@@ -15,11 +15,17 @@ public class OrderItemDto {
     private String imageUrl;
     private Integer stockLeft;
     private String categoryName;
-    
+    private String length;
     private String size;
     private String color;
 
-    
+	public String getLength() {
+		return length;
+	}
+
+	public void setLength(String length) {
+		this.length = length;
+	}
     
     public String getSize() {
 		return size;
