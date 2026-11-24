@@ -1,6 +1,6 @@
 package e_commerce.khilat.dtomodels;
 
-import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,20 +12,15 @@ import e_commerce.khilat.entity.SubCategory;
 
 public class ProductRequest {
 
+	private Long id;
+	private LocalDateTime createdAt;
+	private Long dtOfOps;
+	
+
 	private Long categoryId;
-
-	public List<ReviewMessage> getReviews() {
-		return reviews;
-	}
-
-	public void setReviews(List<ReviewMessage> reviews) {
-		this.reviews = reviews;
-	}
-
 	private Category category;
 
 	private Long subCategoryId;
-
 	private SubCategory subCategory;
 
 	private String name;
@@ -36,8 +31,40 @@ public class ProductRequest {
 	private Boolean isActive;
 
 	private List<ProductImage> productImages = new ArrayList<>();
-	
+
 	private List<ReviewMessage> reviews;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public void setCreatedAt(LocalDateTime createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	public Long getDtOfOps() {
+		return dtOfOps;
+	}
+
+	public void setDtOfOps(Long dtOfOps) {
+		this.dtOfOps = dtOfOps;
+	}
+
+	public List<ReviewMessage> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(List<ReviewMessage> reviews) {
+		this.reviews = reviews;
+	}
 
 	public List<ProductImage> getProductImages() {
 		return productImages;
@@ -63,10 +90,12 @@ public class ProductRequest {
 		this.description = description;
 	}
 
-
-
 	public String getTrending() {
 		return trending;
+	}
+
+	public void setTrending(String trending) {
+		this.trending = trending;
 	}
 
 	public List<ProductVariant> getVariants() {
@@ -75,10 +104,6 @@ public class ProductRequest {
 
 	public void setVariants(List<ProductVariant> variants) {
 		this.variants = variants;
-	}
-
-	public void setTrending(String trending) {
-		this.trending = trending;
 	}
 
 	public Boolean getIsActive() {
@@ -120,5 +145,4 @@ public class ProductRequest {
 	public void setSubCategory(SubCategory subCategory) {
 		this.subCategory = subCategory;
 	}
-
 }
